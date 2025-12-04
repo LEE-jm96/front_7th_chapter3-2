@@ -1,14 +1,10 @@
-import { useState } from "react";
-
 import { CartItem as CartItemType, Product, Coupon } from "../../types";
 import { ProductCard } from "../components/entities/ProductCard";
 import { Cart } from "../components/entities/Cart";
-import { 
-  getMaxApplicableDiscount, 
-  calculateCartTotal 
-} from "../utils/cartCalculations";
+import { getMaxApplicableDiscount } from "../utils/cartCalculations";
 import { useSearch } from "../hooks/useSearch";
 import { useCouponValidation } from "../hooks/useCouponValidation";
+import { useCartPage } from "../hooks/useCartPage";
 
 interface ProductWithUI extends Product {
   description?: string;
@@ -40,36 +36,32 @@ const CartPage = ({
   coupons, 
   addNotification 
 }: CartPageProps) => {
-    const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
+    const {
+      selectedCoupon,
+      totals,
+      handleCouponChange,
+      handleCompleteOrder
+    } = useCartPage({
+      coupons,
+      cart,
+      onCompleteOrder: completeOrder
+    });
     
-    // 검색/필터링 로직 분리
+    // 검색/필터링 로직
     const { filteredItems: filteredProducts } = useSearch({
       items: products,
       searchTerm: debouncedSearchTerm,
       searchFields: ['name', 'description']
     });
 
-    // 쿠폰 검증 로직 분리
+    // 쿠폰 검증 로직 (자동 감시)
     useCouponValidation({
       selectedCoupon,
       coupons,
       cart,
-      onCouponInvalid: () => setSelectedCoupon(null),
+      onCouponInvalid: () => handleCouponChange(''),
       onMinimumAmountWarning: (message) => addNotification(message, 'warning')
     });
-
-    // 장바구니 총액 계산
-    const totals = calculateCartTotal(cart, selectedCoupon);
-
-    const handleCouponChange = (couponCode: string) => {
-      const coupon = coupons.find(c => c.code === couponCode) || null;
-      setSelectedCoupon(coupon);
-    };
-
-    const handleCompleteOrder = () => {
-      completeOrder();
-      setSelectedCoupon(null);
-    };
     
     return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
