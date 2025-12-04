@@ -49,7 +49,6 @@ const App = () => {
     deleteProduct,
   } = useProducts<ProductWithUI>({ initialProducts });
 
-  // Wrapper functions to handle results and show notifications
   const addToCart = (product: ProductWithUI) => {
     const result = addToCartAction(product);
     if (result.error) {
