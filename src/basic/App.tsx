@@ -11,6 +11,7 @@ import { useCoupons } from './hooks/useCoupons';
 import { useProducts } from './hooks/useProducts';
 import { useNotifications } from './hooks/useNotifications';
 import { useDebounce } from './utils/hooks/useDebounce';
+import { generateProductId, generateOrderNumber } from './utils/idGenerator';
 import { initialProducts, initialCoupons } from './constants';
 
 interface ProductWithUI extends Product {
@@ -66,14 +67,23 @@ const App = () => {
   };
 
   const completeOrder = () => {
-    const result = completeOrderAction();
+    // 액션: 주문번호 생성 (시간 의존)
+    const orderNumber = generateOrderNumber();
+    
+    // 순수: 상태 업데이트
+    const result = completeOrderAction(orderNumber);
     if (result.message) {
       addNotification(result.message, 'success');
     }
   };
 
   const addProduct = (newProduct: Omit<ProductWithUI, 'id'>) => {
-    const result = addProductAction(newProduct);
+    // 액션: ID 생성 (시간 의존)
+    const id = generateProductId();
+    const product: ProductWithUI = { ...newProduct, id };
+    
+    // 순수: 상태 업데이트
+    const result = addProductAction(product);
     if (result.message) {
       addNotification(result.message, 'success');
     }

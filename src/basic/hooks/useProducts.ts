@@ -24,12 +24,8 @@ export function useProducts<T extends Product = Product>(options?: UseProductsOp
     }
   }, [initialProducts, products.length, setProducts]);
 
-  // 상품 추가
-  const addProduct = useCallback((newProduct: Omit<T, 'id'>): UseProductsResult => {
-    const product: T = {
-      ...newProduct,
-      id: `p${Date.now()}`
-    } as T;
+  // 상품 추가 (순수 함수 - ID는 외부에서 주입)
+  const addProduct = useCallback((product: T): UseProductsResult => {
     setProducts(prev => [...prev, product]);
     return { success: true, message: '상품이 추가되었습니다.' };
   }, [setProducts]);

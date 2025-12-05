@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { CartItem, Product } from "../../types";
 import { useLocalStorage } from "../utils/hooks/useLocalStorage";
-import { formatDate } from "../utils/formatters";
 
 interface UseCartResult {
   success: boolean;
@@ -93,13 +92,8 @@ export function useCart() {
     return { success: true };
   }, [setCart]);
 
-  // 주문 완료 (장바구니 비우기)
-  const completeOrder = useCallback((): UseCartResult => {
-    const now = new Date();
-    const dateStr = formatDate(now).replace(/-/g, '');
-    const timeStr = now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0');
-    const orderNumber = `ORD-${dateStr}-${timeStr}`;
-    
+  // 주문 완료 (순수 함수 - 주문번호는 외부에서 주입)
+  const completeOrder = useCallback((orderNumber: string): UseCartResult => {
     setCart([]);
     
     return { 

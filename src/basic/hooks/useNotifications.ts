@@ -21,20 +21,22 @@ export function useNotifications(options?: UseNotificationsOptions) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   /**
-   * 알림 추가
+   * 알림 추가 (순수 함수 - ID는 외부에서 주입)
    * @param message 알림 메시지
    * @param type 알림 타입 (error | success | warning)
+   * @param id 알림 ID (선택적 - 테스트용)
    */
   const addNotification = useCallback((
     message: string, 
-    type: 'error' | 'success' | 'warning' = 'success'
+    type: 'error' | 'success' | 'warning' = 'success',
+    id?: string
   ) => {
-    const id = Date.now().toString();
-    setNotifications(prev => [...prev, { id, message, type }]);
+    const notificationId = id || Date.now().toString();
+    setNotifications(prev => [...prev, { id: notificationId, message, type }]);
     
     // 자동으로 제거
     setTimeout(() => {
-      setNotifications(prev => prev.filter(n => n.id !== id));
+      setNotifications(prev => prev.filter(n => n.id !== notificationId));
     }, duration);
   }, [duration]);
 
