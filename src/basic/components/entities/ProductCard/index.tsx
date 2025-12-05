@@ -3,6 +3,7 @@ import { Product } from '../../../../types';
 import { Button } from '../../ui/Button';
 import { Badge } from '../../ui/Badge';
 import { formatCustomerPrice, formatPercentage } from '../../../utils/formatters';
+import { getMaxDiscountRate, getFirstDiscount } from '../../../utils/productHelpers';
 
 interface ProductWithUI extends Product {
   description?: string;
@@ -20,9 +21,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   remainingStock,
   onAddToCart
 }) => {
-  const maxDiscountRate = product.discounts.length > 0 
-    ? Math.max(...product.discounts.map(d => d.rate))
-    : 0;
+  // Entity 헬퍼 함수 사용
+  const maxDiscountRate = getMaxDiscountRate(product);
+  const firstDiscount = getFirstDiscount(product);
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
@@ -59,9 +60,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <p className="text-lg font-bold text-gray-900">
             {remainingStock <= 0 ? 'SOLD OUT' : formatCustomerPrice(product.price)}
           </p>
-          {product.discounts.length > 0 && (
+          {firstDiscount && (
             <p className="text-xs text-gray-500">
-              {product.discounts[0].quantity}개 이상 구매시 할인 {formatPercentage(product.discounts[0].rate)}
+              {firstDiscount.quantity}개 이상 구매시 할인 {formatPercentage(firstDiscount.rate)}
             </p>
           )}
         </div>

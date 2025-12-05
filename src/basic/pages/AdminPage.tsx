@@ -1,6 +1,7 @@
 import { PlusIcon, TrashIcon } from "../components/icons";
 import { Product, Coupon } from "../../types";
 import { formatAdminPrice, formatPercentage } from "../utils/formatters";
+import { getCouponDisplayText } from "../utils/couponHelpers";
 import { Button } from "../components/ui/Button";
 import { ProductForm } from "../components/entities/ProductForm";
 import { CouponForm } from "../components/entities/CouponForm";
@@ -169,9 +170,7 @@ const AdminPage = ({
                       <p className="text-sm text-gray-600 mt-1 font-mono">{coupon.code}</p>
                       <div className="mt-2">
                         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white text-indigo-700">
-                          {coupon.discountType === 'amount' 
-                            ? `${coupon.discountValue.toLocaleString()}원 할인` 
-                            : `${formatPercentage(coupon.discountValue / 100)} 할인`}
+                          {getCouponDisplayText(coupon)}
                         </span>
                       </div>
                     </div>
