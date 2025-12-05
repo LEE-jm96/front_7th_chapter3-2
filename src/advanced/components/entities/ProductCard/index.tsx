@@ -3,7 +3,7 @@ import { Product } from '../../../../types';
 import { Button } from '../../ui/Button';
 import { Badge } from '../../ui/Badge';
 import { formatCustomerPrice, formatPercentage } from '../../../utils/formatters';
-import { getMaxDiscountRate, getFirstDiscount, hasDiscounts } from '../../../utils/productHelpers';
+import { getMaxDiscountRate, getFirstDiscount } from '../../../utils/productHelpers';
 
 interface ProductWithUI extends Product {
   description?: string;
