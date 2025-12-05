@@ -1,3 +1,4 @@
+import React from 'react';
 import { PlusIcon, TrashIcon } from "../components/icons";
 import { Product, Coupon } from "../../types";
 import { formatAdminPrice } from "../utils/formatters";
