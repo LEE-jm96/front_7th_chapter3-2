@@ -1,7 +1,7 @@
 import { useAtom, useSetAtom } from 'jotai';
 import { PlusIcon, TrashIcon } from "../components/icons";
 import { Product, Coupon } from "../../types";
-import { formatAdminPrice, formatPercentage } from "../utils/formatters";
+import { formatAdminPrice } from "../utils/formatters";
 import { generateProductId } from "../utils/idGenerator";
 import { getCouponDisplayText } from "../utils/couponHelpers";
 import { Button } from "../components/ui/Button";
